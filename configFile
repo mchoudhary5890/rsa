@@ -1,0 +1,15 @@
+L1-dcache-load-misses,instructions,cache-references,branch-loads
+instructions,branch-misses,mem-stores,cache-references
+L1-dcache-load-misses,cycles,branch-misses,cache-references 
+branch-loads,branch-instructions,cache-misses,L1-dcache-load-misses
+branch-instructions,mem-stores,cache-references,instructions
+instructions,L1-dcache-store-misses,branch-misses,cycles
+cycles,L1-icache-load-misses,branch-load-misses,cache-references
+cycles,L1-icache-load-misses,L1-dcache-prefetch-misses,branch-loads
+branch-instructions,branch-loads,L1-dcache-load-misses,instructions
+cache-misses,branch-instructions,branch-misses,mem-stores
+L1-dcache-load-misses,ref-cycles,instructions,cache-references
+L1-dcache-load-misses,bus-cycles,instructions,cache-misses
+mem-stores,instructions,cache-misses,cache-references
+mem-stores,instructions,cache-references,L1-dcache-prefetch-misses
+instructions,branch-loads,L1-dcache-store-misses,branch-instructions
