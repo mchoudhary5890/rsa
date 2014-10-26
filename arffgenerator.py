@@ -18,9 +18,11 @@ class ArffGeneration:
     self.groupNamesDict = dict()
     self.extractTo = os.path.join(os.getcwd(),'current')
     self.dumpTo = os.path.join(os.getcwd(), 'arffs')
+    self.processClassLabelDict = dict()
     if os.path.exists(self.dumpTo):
       shutil.rmtree(self.dumpTo)
     os.makedirs(self.dumpTo)
+    self.classLabelCounter = 0
 
 
   def absoluteFilePaths(self):
@@ -40,7 +42,9 @@ class ArffGeneration:
   def dataHandler(self):
     if os.path.isdir(self.inDir):
       for eachZip in self.absoluteFilePaths():
-	print eachZip
+	self.classLabelCounter += 1
+	processName = os.path.splitext(self.pathLeaf(eachZip))[0]
+	self.processClassLabelDict[processName] = self.classLabelCounter
         if not os.path.exists(self.extractTo):
 	  os.makedirs(self.extractTo)
       	with zipfile.ZipFile(eachZip, "r") as z:
@@ -64,6 +68,8 @@ class ArffGeneration:
 	    fileAbsPath = os.path.abspath(os.path.join(eachGroup, eachFile))
 	    with open(fileAbsPath) as f:
               listOfLists.append(map(int, f.read().splitlines()))
+	  if doAdd:
+	    self.groupNamesDict[groupName].append('classLabel')
 	  minLength = len(listOfLists[0])
 	  for eachList in listOfLists:
 	    if len(eachList) < minLength:
@@ -71,12 +77,13 @@ class ArffGeneration:
 	  for eachList in listOfLists:
 	    if len(eachList) > minLength:
 	      del eachList[minLength:len(eachList)]
+	  listOfLists.append([self.classLabelCounter] * minLength)
 	  if groupName in self.groupValuesDict.keys():
 	    self.groupValuesDict[groupName].extend(zip(*listOfLists))
 	  else:
 	    self.groupValuesDict[groupName] = zip(*listOfLists)
 	shutil.rmtree(self.extractTo)
-      print self.groupNamesDict
+      print self.processClassLabelDict
       #print self.groupValuesDict['instructions,branch-misses,mem-stores,cache-references']  
   
   def arffGenerator(self, dataList, rawNamesList, group):
@@ -88,7 +95,7 @@ class ArffGeneration:
     arffDict['relation'] = 'perfEvents'
     arffDict['attributes'] = namesList
     arffDict['data'] = dataList
-    print arff.dumps(arffDict)
+   # print arff.dumps(arffDict)
     outFile = os.path.join(self.dumpTo, group + '.arff')
     with open(outFile, 'w') as f:
       f.write(arff.dumps(arffDict))

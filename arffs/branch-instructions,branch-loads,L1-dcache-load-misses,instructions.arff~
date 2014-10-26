@@ -4,7 +4,7 @@
 @ATTRIBUTE counter_values_branch-instructions REAL
 @ATTRIBUTE counter_values_branch-loads REAL
 @ATTRIBUTE counter_values_instructions REAL
-@ATTRIBUTE classLabel {1,2}
+@ATTRIBUTE classLabel REAL
 
 @DATA
 697382,1976593,1982502,1976593,1
